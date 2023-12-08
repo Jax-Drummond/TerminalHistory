@@ -40,12 +40,16 @@ namespace TerminalHistory
         {
 
 	        if (_commands.First?.Value == e.SubmittedText)
+	        {
 		        return;
+	        }
 
 	        _commands.AddFirst(e.SubmittedText);
 	        
 	        if (_commands.Count > SIZE)
+	        {
 		        _commands.RemoveLast();
+	        }
         }
 
         private void OnTerminalExited(object sender, TerminalEventArgs e)
@@ -81,7 +85,9 @@ namespace TerminalHistory
         private void OnDownArrowPerformed(InputAction.CallbackContext context)
         {
 	        if (_commands.Count == 0 || !Terminal.terminalInUse)
+	        {
 		        return;
+	        }
 
 	        switch (--_index)
 	        {
@@ -91,7 +97,10 @@ namespace TerminalHistory
 		        case 0:
 			        LinkedListNode<string> firstCommand = _commands.First;
 			        if (firstCommand == null)
+			        {
 				        return;
+			        }
+
 			        SetTerminalText(firstCommand.Value);
 			        break;
 		        default:
@@ -103,9 +112,11 @@ namespace TerminalHistory
 
         private void OnUpArrowPerformed(InputAction.CallbackContext context)
         {
-	        if (!Terminal.terminalInUse || _commands.Count <= 0) 
+	        if (!Terminal.terminalInUse || _commands.Count <= 0)
+	        {
 		        return;
-	        
+	        }
+
 	        if (_index >= _commands.Count)
 	        {
 		        _index = _commands.Count - 1;
@@ -129,7 +140,9 @@ namespace TerminalHistory
 		private string GetValueFromIndex(int index)
 		{
 			if (index <= 0)
+			{
 				return _commands.First != null ? _commands.First.Value : string.Empty;
+			}
 
 			int count = _commands.Count;
 			if (index >= count)
