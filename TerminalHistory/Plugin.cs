@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace TerminalHistory
 {
-	[BepInPlugin("atomic.terminalhistory", "Terminal History", "1.0.0")]
+	[BepInPlugin("atomic.terminalhistory", "Terminal History", "1.0.1")]
 	[BepInDependency("atomic.terminalapi", MinimumDependencyVersion: "1.3.0")]
 	public partial class Plugin : BaseUnityPlugin
 	{
