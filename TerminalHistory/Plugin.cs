@@ -13,7 +13,7 @@ namespace TerminalHistory
 	{
 		const int SIZE = 20;
 		private Terminal Terminal;
-		private List<string> _commands = new List<string>();
+		private readonly LinkedList<string> _commands = [];
 		private InputAction _upArrow;
 		private InputAction _downArrow;
 		private int _index = -1;
@@ -30,28 +30,22 @@ namespace TerminalHistory
 
         private void OnTerminalTextChange(object sender, TerminalTextChangedEventArgs e)
         {
-            if (e.CurrentInputText == "" && _index != -1 )
+            if (e.CurrentInputText == string.Empty && _index != -1 )
 			{
 				_index = -1;
 			}
         }
 
         private void OnTerminalSubmit(object sender, TerminalParseSentenceEventArgs e)
-		{
+        {
 
-			if (_commands.Contains(e.SubmittedText))
-			{
-				_commands.Remove(e.SubmittedText);
-			}
-			
-			_commands.Insert(0, e.SubmittedText);
+	        if (_commands.First?.Value == e.SubmittedText)
+		        return;
 
-			if(_commands.Count > SIZE) 
-			{
-				_commands.RemoveRange(SIZE + 1, _commands.Count - SIZE);
-			}
-
-			_index = -1;
+	        _commands.AddFirst(e.SubmittedText);
+	        
+	        if (_commands.Count > SIZE)
+		        _commands.RemoveLast();
         }
 
         private void OnTerminalExited(object sender, TerminalEventArgs e)
@@ -74,7 +68,8 @@ namespace TerminalHistory
 
         private void OnTerminalStarted(object sender, TerminalEventArgs e)
 		{
-			_commands.Clear();
+			// _commands.Clear(); // Maybe keep the history across the game session?
+			_index = -1;
 
 			_upArrow = new InputAction("UpArrow", 0, "<Keyboard>/uparrow", "Press");
 			_downArrow = new InputAction("DownArrow", 0, "<Keyboard>/downarrow", "Press");
@@ -85,39 +80,43 @@ namespace TerminalHistory
 
         private void OnDownArrowPerformed(InputAction.CallbackContext context)
         {
-			if (_commands.Count > 0 && Terminal.terminalInUse)
-			{
-				_index--;
-				if (_index <= -1)
-				{
-					_index = -1;
-                    SetTerminalText("");
-                }
-				else
-				{
-					string command = _commands[_index];
-                    SetTerminalText(command);
-                }
-            }
+	        if (_commands.Count == 0 || !Terminal.terminalInUse)
+		        return;
+
+	        switch (--_index)
+	        {
+		        case < 0:
+			        _index = -1;
+			        break;
+		        case 0:
+			        LinkedListNode<string> firstCommand = _commands.First;
+			        if (firstCommand == null)
+				        return;
+			        SetTerminalText(firstCommand.Value);
+			        break;
+		        default:
+			        string command = GetValueFromIndex(_index);
+			        SetTerminalText(command);
+			        break;
+	        }
         }
 
         private void OnUpArrowPerformed(InputAction.CallbackContext context)
         {
-            if (Terminal.terminalInUse && _commands.Count > 0)
-			{
-				_index++;
-				if (_index >= _commands.Count)
-				{
-					_index = _commands.Count - 1;
-					string command = _commands[_commands.Count - 1];
-                    SetTerminalText(command);
-                }
-				else
-				{
-					string command = _commands[_index];
-                    SetTerminalText(command);
-                }
-            }
+	        if (!Terminal.terminalInUse || _commands.Count <= 0) 
+		        return;
+	        
+	        if (_index >= _commands.Count)
+	        {
+		        _index = _commands.Count - 1;
+		        LinkedListNode<string> lastCommand = _commands.Last!;
+		        SetTerminalText(lastCommand.Value);
+	        }
+	        else
+	        {
+		        string command = GetValueFromIndex(++_index);
+		        SetTerminalText(command);
+	        }
         }
 
 		private void SetTerminalText(string text)
@@ -126,5 +125,27 @@ namespace TerminalHistory
             Terminal.screenText.text = TerminalApi.TerminalApi.Terminal.currentText;
 			Terminal.textAdded = text.Length;
         }
+		
+		private string GetValueFromIndex(int index)
+		{
+			if (index <= 0)
+				return _commands.First != null ? _commands.First.Value : string.Empty;
+
+			int count = _commands.Count;
+			if (index >= count)
+			{
+				return _commands.Last!.Value;
+			}
+
+			int iterator = 0;
+			LinkedListNode<string> currentNode = _commands.First!;
+
+			while (iterator++ < index && currentNode.Next != null)
+			{
+				currentNode = currentNode.Next;
+			}
+
+			return currentNode.Value;
+		}
     }
 }
