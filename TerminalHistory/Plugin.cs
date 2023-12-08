@@ -48,7 +48,7 @@ namespace TerminalHistory
 
 			if(_commands.Count > SIZE) 
 			{
-				_commands.RemoveRange(SIZE + 1, _commands.Count - SIZE);
+				_commands.RemoveRange(SIZE, _commands.Count - SIZE);
 			}
 
 			_index = -1;
