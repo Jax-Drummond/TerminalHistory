@@ -11,6 +11,10 @@ Or just use the ThunderStore mod loader.
 
 ## Changelog
 
-### Version 1.0.1 ArgumentException Fix
+### Version 1.0.0
 
 - Release
+
+## Version 1.0.1 
+
+- Fixed an error if you input more than 20 different commands, credits: [NickolasFleim](https://github.com/NotAtomicBomb/TerminalHistory/pull/1)
