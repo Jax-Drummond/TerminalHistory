@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace TerminalHistory
 {
-	[BepInPlugin("atomic.terminalhistory", "Terminal History", "1.0.0")]
+	[BepInPlugin("atomic.terminalhistory", "Terminal History", "1.0.1")]
 	[BepInDependency("atomic.terminalapi", MinimumDependencyVersion: "1.3.0")]
 	public partial class Plugin : BaseUnityPlugin
 	{
@@ -48,7 +48,7 @@ namespace TerminalHistory
 
 			if(_commands.Count > SIZE) 
 			{
-				_commands.RemoveRange(SIZE + 1, _commands.Count - SIZE);
+				_commands.RemoveRange(SIZE, _commands.Count - SIZE);
 			}
 
 			_index = -1;

@@ -11,6 +11,6 @@ Or just use the ThunderStore mod loader.
 
 ## Changelog
 
-### Version 1.0.0
+### Version 1.0.1 ArgumentException Fix
 
 - Release
