@@ -27,3 +27,7 @@ Or just use the ThunderStore mod loader.
 
 - Implemented the command draft functionality. If they user has typed out anything already without sending it and instead uses the (up) keybind to go back in command history, it will save the drafted command they typed out and if they return to index -1 with the (down) keybind it will be restored.in-game. credits: [CTN-Originals](https://github.com/8CTN8)
 - fixed a bug where if you go out of the terminal while already having used the back keys, the next time you use them it would not have been reset to the beginning. credits: [CTN-Originals](https://github.com/8CTN8)
+
+## Version 1.0.4
+
+- Added the terminal functionality for when a previous command is edited(whether added or deleting) it will set the current index to -1 and will be saved as a command draft

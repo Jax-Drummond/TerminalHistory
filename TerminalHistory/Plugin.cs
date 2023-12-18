@@ -9,7 +9,7 @@ using LethalCompanyInputUtils.Api;
 
 namespace TerminalHistory
 {
-	[BepInPlugin("atomic.terminalhistory", "Terminal History", "1.0.1")]
+	[BepInPlugin("atomic.terminalhistory", "Terminal History", "1.0.4")]
 	[BepInDependency("atomic.terminalapi", MinimumDependencyVersion: "1.3.0")]
 	[BepInDependency("com.rune580.LethalCompanyInputUtils", MinimumDependencyVersion: "0.4.2")]
 	public partial class Plugin : BaseUnityPlugin
@@ -36,18 +36,12 @@ namespace TerminalHistory
         {
             if (_index != -1 )
 			{
-				if (e.CurrentInputText == "")
-				{
-					_index = -1;
-				}
 				if(e.CurrentInputText != _commands[_index])
 				{
 					_commandDraft = e.CurrentInputText;
 					_index = -1;
 				}
 			}
-
-			
         }
 
         private void OnTerminalSubmit(object sender, TerminalParseSentenceEventArgs e)
