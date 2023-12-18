@@ -2,6 +2,7 @@
 using HarmonyLib;
 using System.Reflection;
 using UnityEngine.InputSystem;
+using TApi = TerminalApi.TerminalApi;
 using static TerminalApi.Events.Events;
 using System.Collections.Generic;
 
@@ -10,13 +11,14 @@ using LethalCompanyInputUtils.Api;
 namespace TerminalHistory
 {
 	[BepInPlugin("atomic.terminalhistory", "Terminal History", "1.0.1")]
-	[BepInDependency("atomic.terminalapi", MinimumDependencyVersion: "1.4.0")]
+	[BepInDependency("atomic.terminalapi", MinimumDependencyVersion: "1.3.0")]
 	[BepInDependency("com.rune580.LethalCompanyInputUtils", MinimumDependencyVersion: "0.4.2")]
 	public partial class Plugin : BaseUnityPlugin
 	{
 		const int SIZE = 20;
 		private Terminal Terminal;
 		private List<string> _commands = new List<string>();
+		private string _commandDraft = ""; //? if the user uses the prev key while already having a command typed, it will be saved here
 		// private InputAction _upArrow; //! old way
 		// private InputAction _downArrow; //! old way
 		private Keybinds _keybinds = new Keybinds();
@@ -67,7 +69,8 @@ namespace TerminalHistory
 			_keybinds.PrevTerminalKey.performed -= OnDownArrowPerformed;
 			_keybinds.PrevTerminalKey.Disable();
 
-			_index = -1;
+			_index = -1; //? reset the index when the terminal is exited
+			_commandDraft = ""; //? reset the command draft when the terminal is exited
         }
 
         private void OnTerminalBeginUsing(object sender, TerminalEventArgs e)
@@ -86,7 +89,7 @@ namespace TerminalHistory
 			_keybinds.NextTerminalKey = new InputAction("UpArrow", 0, "<Keyboard>/uparrow", "Press");
 			_keybinds.PrevTerminalKey = new InputAction("DownArrow", 0, "<Keyboard>/downarrow", "Press");
 
-			Terminal = TerminalApi.TerminalApi.Terminal;
+			Terminal = TApi.Terminal;
 
         }
 
@@ -98,7 +101,7 @@ namespace TerminalHistory
 				if (_index <= -1)
 				{
 					_index = -1;
-                    SetTerminalText("");
+                    SetTerminalText(_commandDraft);
                 }
 				else
 				{
@@ -112,6 +115,12 @@ namespace TerminalHistory
         {
             if (Terminal.terminalInUse && _commands.Count > 0)
 			{
+				if (_index == -1)
+				{
+					_commandDraft = TApi.GetTerminalInput();
+					Logger.LogInfo($"Command Draft: {_commandDraft}");
+				}
+
 				_index++;
 				if (_index >= _commands.Count)
 				{
@@ -129,8 +138,8 @@ namespace TerminalHistory
 
 		private void SetTerminalText(string text)
 		{
-			Terminal.TextChanged(TerminalApi.TerminalApi.Terminal.currentText.Substring(0, TerminalApi.TerminalApi.Terminal.currentText.Length - TerminalApi.TerminalApi.Terminal.textAdded) + text);
-            Terminal.screenText.text = TerminalApi.TerminalApi.Terminal.currentText;
+			Terminal.TextChanged(TApi.Terminal.currentText.Substring(0, TApi.Terminal.currentText.Length - TApi.Terminal.textAdded) + text);
+            Terminal.screenText.text = TApi.Terminal.currentText;
 			Terminal.textAdded = text.Length;
         }
     }
