@@ -18,3 +18,12 @@ Or just use the ThunderStore mod loader.
 ## Version 1.0.1 
 
 - Fixed an error if you input more than 20 different commands, credits: [NickolasFleim](https://github.com/NotAtomicBomb/TerminalHistory/pull/1)
+
+## Version 1.0.2
+
+- Implemented [LethalCompany InputUtils](https://thunderstore.io/c/lethal-company/p/Rune580/LethalCompany_InputUtils/) and reformed everything to support this new way of handling the keybinds. This now gives the mod functionality to change the keybinds in-game. credits: [CTN-Originals](https://github.com/8CTN8)
+
+## Version 1.0.3
+
+- Implemented the command draft functionality. If they user has typed out anything already without sending it and instead uses the (up) keybind to go back in command history, it will save the drafted command they typed out and if they return to index -1 with the (down) keybind it will be restored.in-game. credits: [CTN-Originals](https://github.com/8CTN8)
+- fixed a bug where if you go out of the terminal while already having used the back keys, the next time you use them it would not have been reset to the beginning. credits: [CTN-Originals](https://github.com/8CTN8)
