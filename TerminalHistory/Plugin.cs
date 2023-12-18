@@ -5,7 +5,6 @@ using UnityEngine.InputSystem;
 using TApi = TerminalApi.TerminalApi;
 using static TerminalApi.Events.Events;
 using System.Collections.Generic;
-
 using LethalCompanyInputUtils.Api;
 
 namespace TerminalHistory
@@ -19,8 +18,6 @@ namespace TerminalHistory
 		private Terminal Terminal;
 		private List<string> _commands = new List<string>();
 		private string _commandDraft = ""; //? if the user uses the prev key while already having a command typed, it will be saved here
-		// private InputAction _upArrow; //! old way
-		// private InputAction _downArrow; //! old way
 		private Keybinds _keybinds = new Keybinds();
 		private int _index = -1;
 
@@ -37,10 +34,20 @@ namespace TerminalHistory
 
         private void OnTerminalTextChange(object sender, TerminalTextChangedEventArgs e)
         {
-            if (e.CurrentInputText == "" && _index != -1 )
+            if (_index != -1 )
 			{
-				_index = -1;
+				if (e.CurrentInputText == "")
+				{
+					_index = -1;
+				}
+				if(e.CurrentInputText != _commands[_index])
+				{
+					_commandDraft = e.CurrentInputText;
+					_index = -1;
+				}
 			}
+
+			
         }
 
         private void OnTerminalSubmit(object sender, TerminalParseSentenceEventArgs e)
@@ -90,7 +97,6 @@ namespace TerminalHistory
 			_keybinds.PrevTerminalKey = new InputAction("DownArrow", 0, "<Keyboard>/downarrow", "Press");
 
 			Terminal = TApi.Terminal;
-
         }
 
         private void OnDownArrowPerformed(InputAction.CallbackContext context)
@@ -100,8 +106,12 @@ namespace TerminalHistory
 				_index--;
 				if (_index <= -1)
 				{
-					_index = -1;
-                    SetTerminalText(_commandDraft);
+					if(_index == -1)
+					{
+                        SetTerminalText(_commandDraft);
+                    }
+                    _index = -1;
+                    
                 }
 				else
 				{
@@ -118,7 +128,6 @@ namespace TerminalHistory
 				if (_index == -1)
 				{
 					_commandDraft = TApi.GetTerminalInput();
-					Logger.LogInfo($"Command Draft: {_commandDraft}");
 				}
 
 				_index++;
