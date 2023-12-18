@@ -66,6 +66,8 @@ namespace TerminalHistory
 
 			_keybinds.PrevTerminalKey.performed -= OnDownArrowPerformed;
 			_keybinds.PrevTerminalKey.Disable();
+
+			_index = -1;
         }
 
         private void OnTerminalBeginUsing(object sender, TerminalEventArgs e)
