@@ -1,6 +1,6 @@
 {
 	"name": "Terminal_History",
-	"version_number": "1.0.1",
+	"version_number": "1.0.2",
 	"website_url": "https://github.com/NotAtomicBomb/TerminalHistory",
 	"description": "Command History for the Terminal.",
 	"dependencies": [
