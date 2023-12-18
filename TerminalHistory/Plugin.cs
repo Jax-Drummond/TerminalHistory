@@ -10,7 +10,7 @@ using LethalCompanyInputUtils.Api;
 namespace TerminalHistory
 {
 	[BepInPlugin("atomic.terminalhistory", "Terminal History", "1.0.1")]
-	[BepInDependency("atomic.terminalapi", MinimumDependencyVersion: "1.3.0")]
+	[BepInDependency("atomic.terminalapi", MinimumDependencyVersion: "1.4.0")]
 	[BepInDependency("com.rune580.LethalCompanyInputUtils", MinimumDependencyVersion: "0.4.2")]
 	public partial class Plugin : BaseUnityPlugin
 	{
