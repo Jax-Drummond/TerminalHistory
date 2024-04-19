@@ -1,7 +1,7 @@
 {
 	"name": "Terminal_History",
-	"version_number": "1.0.4",
-	"website_url": "https://github.com/NotAtomicBomb/TerminalHistory",
+	"version_number": "1.0.5",
+	"website_url": "https://github.com/Jax-Drummon/TerminalHistory",
 	"description": "Command History for the Terminal.",
 	"dependencies": [
 		"BepInEx-BepInExPack-5.4.2100",
